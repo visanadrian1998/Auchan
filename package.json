@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node server.ts"
+    "start": "ts-node server.ts",
+    "server": "ts-node server.ts",
+    "client": "cd client && npm start",
+    "build": "npm-run-all --parallel server client"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +25,7 @@
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "jsonwebtoken": "^9.0.2",
+    "npm-run-all": "^4.1.5",
     "react-router-dom": "^6.16.0",
     "styled-components": "^6.0.8",
     "ts-node": "^10.9.1",
