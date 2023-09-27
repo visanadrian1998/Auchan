@@ -30,18 +30,22 @@ const Login = () => {
   };
 
   const loginUser = async () => {
-    const response = await Axios.post("/api/loginUser", {
-      Username: usernameLog,
-      Password: passwordLog,
-    })
-    if (response.data?.success) {
-      LoginMessage.current.innerHTML = "Felicitari! V-ati logat cu succes.";
-      setUsernameLog("");
-      setPasswordLog("");
-      userContext.fetchCurrentUser();
-      navigate("/");
+    try{
+      const response = await Axios.post("/api/loginUser", {
+        Username: usernameLog,
+        Password: passwordLog,
+      })
+      if (response.data?.success) {
+        LoginMessage.current.innerHTML = "Felicitari! V-ati logat cu succes.";
+        setUsernameLog("");
+        setPasswordLog("");
+        userContext.fetchCurrentUser();
+        navigate("/");
+      }
+      else LoginMessage.current.innerHTML = "Logare esuata";
+    }catch(_){
+      LoginMessage.current.innerHTML = "Logare esuata";
     }
-    else LoginMessage.current.innerHTML = "Logare esuata";
   };
 
   return (
