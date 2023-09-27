@@ -9,7 +9,7 @@
     "client": "cd client && npm start",
     "installServer": "npm install",
     "installClient": "cd client && npm install",
-    "install": "run-s installServer installClient",
+    "installAll": "npm-run-all --parallel installServer installClient",
     "build": "npm-run-all --parallel server client"
   },
   "keywords": [],
