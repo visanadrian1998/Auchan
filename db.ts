@@ -1,12 +1,24 @@
 import { db, Table } from './dbConfig.ts'
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
+interface RegisterObject {
+    Username: string;
+    Password: string;
+    Name: string;
+    Address: string;
+}
 
 interface LoginObject {
     Username: string;
     Password: string;
 }
 
-const registerUser = async (data: Object) => {
+const registerUser = async (data: RegisterObject) => {
     try {
+        const hash = await bcrypt.hash(data.Password, saltRounds);
+        if(!hash) return { success: false }
+        data.Password=hash;
         const params = {
             TableName: Table,
             Item: data
@@ -24,16 +36,16 @@ const loginUser = async (data: LoginObject) => {
             .query({
                 TableName: Table,
                 KeyConditionExpression: 'Username = :Username',
-                FilterExpression: 'Password = :Password',
                 ExpressionAttributeValues: {
                     ":Username": data.Username,
-                    ":Password": data.Password,
                 }
             })
             .promise()
             .catch((_) => {return false});
         if(response && response.Count){
-            return {success: true, data: response.Items && response.Items[0]}
+            const isPasswordCorrect = await bcrypt.compare(data.Password,response.Items[0].Password);
+            if(isPasswordCorrect) return {success: true, data: response.Items && response.Items[0]};
+            else  return { success: false }
         }else return {success: false}
     } catch (error) {
         return { success: false }
